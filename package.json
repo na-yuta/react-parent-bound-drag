@@ -1,13 +1,13 @@
 {
-  "name": "react-bounded-drag",
+  "name": "react-parent-bound-drag",
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["react", "drag"],
+  "author": "https://github.com/na-yuta",
+  "license": "MIT",
   "description": "",
   "dependencies": {
     "react": "^18.3.1",
