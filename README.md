@@ -31,7 +31,7 @@ const DraggableBox = () => {
     onPointerDown,
     onPointerUp,
   } = useBoundedDrag({
-    direction: 'both',  // Allow dragging in both X and Y directions
+    direction: '',  // Allow dragging in both X and Y directions
     threshold: 10,  // Minimum threshold before drag starts
     range: {
       x: { min: 0, max: 300 },  // Limit dragging in X axis between 0 and 300 pixels
@@ -79,7 +79,7 @@ export default DraggableBox;
 ## Example Explanation
 useBoundedDrag Hook: This hook handles both touch and pointer events for dragging. It provides handlers for drag events (onTouchStart, onTouchMove, onPointerDown, etc.) which should be attached to the draggable element.
 
-Direction: The direction prop controls whether the element can be dragged along the 'x', 'y', or 'both' axes. In this example, 'both' allows free movement in both axes.
+Direction: The direction prop controls whether the element can be dragged along the 'x', 'y', or '' axes. In this example, '' allows free movement in both axes.
 
 Threshold: The threshold option sets the minimum distance the user must drag before the drag action begins. In this case, a drag won't start until the user moves the element by 10 pixels.
 
