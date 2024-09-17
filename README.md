@@ -6,12 +6,12 @@ A React hook that provides drag functionality with configurable boundaries, dire
 You can install this package via npm:
 
 ```bash
-npm install react-bounded-drag
+npm install react-parent-bound-drag
 ```
 
 Or via yarn:
 ```bash
-yarn add react-bounded-drag
+yarn add react-parent-bound-drag
 ```
 
 ## Usage
@@ -20,7 +20,7 @@ This hook enables draggable elements in React, allowing you to control the drag 
 ## Example
 ```tsx
 import React from 'react';
-import { useBoundedDrag } from 'react-bounded-drag';  // Import the hook
+import { useBoundedDrag } from 'react-parent-bound-drag';  // Import the hook
 
 const DraggableBox = () => {
   const {
