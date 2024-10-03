@@ -8,9 +8,10 @@ export const useBoundedDrag = (options?: {
   direction?: 'x'|'y'|'',
   threshold?: number,
   range?: {
-    x?: { max?: number, min?: number },
-    y?: { max?: number, min?: number },
+    x?: { max?: number | 'infinity', min?: number | 'infinity' },
+    y?: { max?: number | 'infinity', min?: number | 'infinity' },
   },
+  reverseBounds?: boolean,
   onDrag?: (e: React.PointerEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => void,
   onDragEnd?: (e: React.PointerEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => void,
   onDragStart?: (e: React.PointerEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => void,
@@ -35,31 +36,55 @@ export const useBoundedDrag = (options?: {
   };
 
   const calcX = (val: number, target: HTMLElement) => {
-    if (options?.range?.x?.max != null) {
-      val = Math.min(options.range.x.max, val);
+    let max = options?.range?.x?.max;
+    let min = options?.range?.x?.min;
+
+    if (max === 'infinity') {
+      max = Infinity;
+    } else if (max != null) {
+      max = Number(max);
     } else if (target.parentElement) {
-      val = Math.min(target.parentElement.clientWidth - target.clientWidth, val);
-    }
-    if (options?.range?.x?.min != null) {
-      val = Math.max(options.range.x.min, val);
+      max = options?.reverseBounds ? 0 : (target.parentElement.clientWidth - target.clientWidth);
     } else {
-      val = Math.max(0, val);
+      max = Infinity;
     }
-    return `${val}px`;
+
+    if (min === 'infinity') {
+      min = -Infinity;
+    } else if (min != null) {
+      min = Number(min);
+    } else if (target.parentElement) {
+      min = options?.reverseBounds ? (target.parentElement.clientWidth - target.clientWidth) : 0;
+    } else {
+      min = 0;
+    }
+    return `${Math.min(max, Math.max(min, val))}px`;
   };
 
   const calcY = (val: number, target: HTMLElement) => {
-    if (options?.range?.y?.max != null) {
-      if (options.range.y.max !== -1) val = Math.min(options.range.y.max, val);
+    let max = options?.range?.y?.max;
+    let min = options?.range?.y?.min;
+
+    if (max === 'infinity') {
+      max = Infinity;
+    } else if (max != null) {
+      max = Number(max);
     } else if (target.parentElement) {
-      val = Math.min(target.parentElement.clientHeight - target.clientHeight, val);
-    }
-    if (options?.range?.y?.min != null) {
-      val = Math.max(options.range.y.min, val);
+      max = options?.reverseBounds ? 0 : (target.parentElement.clientHeight - target.clientHeight);
     } else {
-      val = Math.max(0, val);
+      max = Infinity;
     }
-    return `${val}px`;
+
+    if (min === 'infinity') {
+      min = -Infinity;
+    } else if (min != null) {
+      min = Number(min);
+    } else if (target.parentElement) {
+      min = options?.reverseBounds ? (target.parentElement.clientHeight - target.clientHeight) : 0;
+    } else {
+      min = 0;
+    }
+    return `${Math.min(max, Math.max(min, val))}px`;
   };
 
   const onCommonDragStart = (e: React.PointerEvent<HTMLElement> | React.TouchEvent<HTMLElement>, callback: () => void) => {
@@ -122,31 +147,31 @@ export const useBoundedDrag = (options?: {
     e.currentTarget.setPointerCapture(e.pointerId);
     e.currentTarget.draggable = false;
     if (options?.direction === 'x') {
-      dragXVal.current = dragXVal.current + e.movementX;
+      dragXVal.current += e.movementX;
       if (options?.threshold && !overThreshold.current) {
-        if (Math.abs(e.movementX) < options.threshold) return;
+        if (Math.abs(dragXVal.current) < options.threshold) return;
         overThreshold.current = true;
-        e.movementX = e.movementX + dragXVal.current;
+        e.movementX += dragXVal.current;
       }
       const left = calcX(e.currentTarget.offsetLeft + e.movementX, e.currentTarget);
       updatePosition(e.currentTarget, left, e.currentTarget.style.top);
     } else if (options?.direction === 'y') {
-      dragYVal.current = dragYVal.current + e.movementY;
+      dragYVal.current += e.movementY;
       if (options?.threshold && !overThreshold.current) {
         if (Math.abs(dragYVal.current) < options.threshold) return;
         overThreshold.current = true;
-        e.movementY = e.movementY + dragYVal.current;
+        e.movementY += dragYVal.current;
       }
       const top = calcY(e.currentTarget.offsetTop + e.movementY, e.currentTarget);
       updatePosition(e.currentTarget, e.currentTarget.style.left, top);
     } else {
-      dragXVal.current = dragXVal.current + e.movementX;
-      dragYVal.current = dragYVal.current + e.movementY;
+      dragXVal.current += e.movementX;
+      dragYVal.current += e.movementY;
       if (options?.threshold && !overThreshold.current) {
         if (Math.max(Math.abs(dragYVal.current), Math.abs(dragXVal.current)) < options.threshold) return;
         overThreshold.current = true;
-        e.movementX = e.movementX + dragXVal.current;
-        e.movementY = e.movementY + dragYVal.current;
+        e.movementX += dragXVal.current;
+        e.movementY += dragYVal.current;
       }
       const left = calcX(e.currentTarget.offsetLeft + e.movementX, e.currentTarget);
       const top = calcY(e.currentTarget.offsetTop + e.movementY, e.currentTarget);

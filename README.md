@@ -97,6 +97,7 @@ The hook accepts an optional configuration object with the following properties:
 |direction  |  'x' \| 'y' \| ''  |  ''  |  Specifies the axis along which the element can be dragged. Empty string means free movement in both directions.|
 |threshold  |  number  |  0  |  The minimum distance (in pixels) that must be dragged before the drag starts.|
 |range  |  object  |  {}  |  Specifies the boundaries for dragging. Can limit the drag range on both X and Y axes.|
+|reverseBounds  |  boolean  |  false  | Inverts boundary calculations to constrain dragging when the draggable element is larger than its parent. |
 |onDrag  |  function  |  undefined  |  A callback function called during the dragging process.|
 |onDragStart  |  function  |  undefined  |  A callback function called when the dragging starts.|
 |onDragEnd  |  function  |  undefined  |  A callback function called when the dragging ends.|
