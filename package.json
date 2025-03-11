@@ -1,6 +1,6 @@
 {
   "name": "react-parent-bound-drag",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc"
@@ -16,8 +16,6 @@
   "devDependencies": {
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
-    "typescript": "^5.6.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "typescript": "^5.6.2"
   }
 }
